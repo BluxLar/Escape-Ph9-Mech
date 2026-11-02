@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation Forschungsstation – Physik Escape Room</title>
+<style>
+:root {
+  --site-primary: #123b50;
+  --site-secondary: #176b70;
+  --site-background: #07151e;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #ffffff;
+  --site-on-background: #eaf5f6;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+body { background: light-dark(#eaf1f3, #07151e); }
+#app { min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; background-color: light-dark(#eaf1f3, var(--site-background)); color: light-dark(#142a35, var(--site-on-background)); position: relative; }
+#app::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:calc(.24 * var(--site-decoration-opacity)); background: radial-gradient(ellipse at 75% 10%, rgba(31,164,167,.23), transparent 42%), radial-gradient(ellipse at 12% 70%, rgba(37,106,147,.18), transparent 45%); }
+header { position:relative; z-index:1; padding:18px clamp(18px,4vw,56px); display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--site-primary); color:var(--site-on-primary); border-bottom:1px solid rgba(255,255,255,.15); }
+.brand { display:flex; align-items:center; gap:12px; letter-spacing:.12em; font-size:12px; font-weight:800; }
+.brand-mark { width:38px; height:38px; border:1px solid rgba(255,255,255,.5); border-radius:12px; display:grid; place-items:center; background:rgba(255,255,255,.08); }
+.header-right { display:flex; align-items:center; gap:10px; font-size:12px; color:#c9e3e8; }
+.pulse { width:8px; height:8px; background:#76e3b3; border-radius:50%; box-shadow:0 0 12px #76e3b3; }
+main { position:relative; z-index:1; width:min(1120px, calc(100% - 32px)); margin:0 auto; padding:clamp(22px,4vw,48px) 0 56px; }
+.hero { border:1px solid rgba(115,177,190,.25); border-radius:calc(24px * var(--site-radius-scale)); overflow:hidden; min-height:270px; position:relative; background:linear-gradient(115deg,rgba(4,21,31,.96),rgba(10,54,65,.82)), radial-gradient(circle at 80% 40%,#267b7b,transparent 38%); box-shadow:0 22px 60px rgba(0,0,0,.2); }
+.hero-art { position:absolute; inset:0 0 0 auto; width:54%; opacity:.9; pointer-events:none; }
+.hero-art svg { width:100%; height:100%; }
+.hero-copy { position:relative; z-index:1; max-width:650px; padding:clamp(28px,5vw,58px); }
+.eyebrow { color:#82d6d1; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
+h1 { font-family:var(--site-font-heading); font-size:calc(clamp(34px,5vw,58px) * var(--site-heading-scale)); line-height:1.02; letter-spacing:-.045em; margin:13px 0 16px; color:#f3fbfc; }
+.hero p { color:#c6dadd; line-height:1.65; max-width:570px; margin:0; font-size:15px; }
+.meta-row { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }
+.meta { border:1px solid rgba(176,224,226,.25); border-radius:30px; padding:8px 12px; font-size:11px; color:#d6eeee; background:rgba(255,255,255,.06); }
+.layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(250px,.75fr); gap:18px; margin-top:20px; }
+.panel { background:light-dark(#fff,#10232d); border:1px solid light-dark(#d5e1e4,#24414b); border-radius:calc(18px * var(--site-radius-scale)); padding:clamp(18px,3vw,28px); box-shadow:0 12px 34px rgba(0,0,0,.08); }
+.panel h2 { font-size:calc(20px * var(--site-heading-scale)); margin:0 0 10px; letter-spacing:-.02em; }
+.muted { color:light-dark(#58707a,#a9c0c6); line-height:1.6; font-size:14px; }
+.story { font-size:15px; line-height:1.75; margin:16px 0 20px; }
+.btn { border:0; cursor:pointer; border-radius:12px; padding:13px 18px; font:700 13px var(--site-font-body); background:var(--site-secondary); color:var(--site-on-secondary); transition:transform .15s,filter .15s; }
+.btn:hover { filter:brightness(1.12); transform:translateY(-1px); }
+.btn:focus-visible,input:focus-visible { outline:3px solid #e4ad52; outline-offset:3px; }
+.btn.secondary { background:light-dark(#e8f0f2,#1b3540); color:light-dark(#183642,#dff3f4); border:1px solid light-dark(#c9dadd,#34545f); }
+.btn.ghost { background:transparent; border:1px solid rgba(139,191,198,.4); color:inherit; }
+.btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:18px 0; }
+.stat { padding:14px; border-radius:13px; background:light-dark(#f0f6f7,#172f39); border:1px solid light-dark(#e0eaec,#2b4650); }
+.stat small { display:block; color:light-dark(#607982,#a4c0c5); font-size:10px; text-transform:uppercase; letter-spacing:.12em; font-weight:800; }
+.stat strong { display:block; font-size:24px; margin-top:5px; font-variant-numeric:tabular-nums; }
+.progress-track { height:8px; border-radius:20px; overflow:hidden; background:light-dark(#e1ebed,#263f49); margin:10px 0 8px; }
+.progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#2e9d94,#83d6b5); transition:width .3s; }
+.station-list { display:grid; gap:9px; margin-top:16px; }
+.station-link { display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:12px; border:1px solid light-dark(#e0e9eb,#29444e); background:light-dark(#f7fafb,#142a34); color:inherit; text-align:left; width:100%; }
+.station-link .num { width:30px; height:30px; flex:0 0 30px; display:grid; place-items:center; border-radius:9px; background:light-dark(#e4edef,#203b45); font-weight:800; font-size:12px; }
+.station-link small { display:block; color:light-dark(#6a8188,#9db7be); margin-top:3px; }
+.station-link.done .num { background:#1c806e; color:white; }
+.station-link.active { border-color:#299d96; box-shadow:0 0 0 2px rgba(41,157,150,.12); }
+.station-link:disabled { opacity:.55; cursor:not-allowed; }
+.stage { margin-top:18px; }
+.stage-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.tag { font-size:10px; font-weight:800; letter-spacing:.13em; color:#218c85; text-transform:uppercase; }
+.stage h2 { font-size:26px; margin:7px 0 5px; }
+.scene { min-height:125px; border-radius:14px; padding:20px; margin:15px 0; background:linear-gradient(115deg,rgba(9,35,46,.96),rgba(20,82,86,.82)); color:#e8f6f5; position:relative; overflow:hidden; }
+.scene::after { content:""; position:absolute; width:180px; height:180px; right:-30px; top:-55px; border:1px solid rgba(126,220,210,.3); border-radius:50%; box-shadow:0 0 0 18px rgba(126,220,210,.04),0 0 0 38px rgba(126,220,210,.03); }
+.scene b { display:block; font-size:12px; letter-spacing:.13em; color:#83d9d0; text-transform:uppercase; margin-bottom:9px; }
+.scene p { max-width:680px; line-height:1.6; font-size:14px; margin:0; position:relative; z-index:1; }
+.problem { font-size:15px; line-height:1.75; margin:16px 0; }
+.task-card { border:1px solid light-dark(#dce8ea,#294751); background:light-dark(#f8fbfc,#132a34); border-radius:14px; padding:18px; margin:16px 0; }
+.task-card h3 { margin:7px 0 9px; font-size:19px; }
+.task-card p { font-size:14px; line-height:1.65; }
+.runner-table { border:1px solid light-dark(#dce8ea,#294751); border-radius:10px; overflow:hidden; margin:14px 0; }
+.runner-table div { display:grid; grid-template-columns:1fr 1fr; padding:10px 13px; border-bottom:1px solid light-dark(#dce8ea,#294751); }
+.runner-table div:last-child { border-bottom:0; }
+.runner-table div:first-child { background:light-dark(#edf4f5,#1b3540); }
+.field-label { display:block; font-size:12px; font-weight:800; margin:12px 0 7px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.force-arrow { display:flex; align-items:center; gap:12px; padding:10px 13px; margin:12px 0; border-radius:10px; background:light-dark(#edf4f5,#1b3540); font-weight:700; }
+.force-arrow .arrow { font-size:26px; color:#218c85; }
+.data-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin:14px 0; }
+.datum { background:light-dark(#eff5f6,#172f39); border:1px solid light-dark(#dce8ea,#294751); border-radius:11px; padding:12px; }
+.datum small { display:block; font-size:10px; color:light-dark(#647d85,#9ebbc1); text-transform:uppercase; letter-spacing:.1em; }
+.datum strong { display:block; font-size:18px; margin-top:4px; }
+.answer-row { display:flex; gap:10px; margin-top:16px; align-items:end; flex-wrap:wrap; }
+.field { flex:1; min-width:170px; }
+.field label { display:block; font-size:12px; font-weight:800; margin-bottom:7px; }
+input { width:100%; border:1px solid light-dark(#c8d9dd,#385661); border-radius:11px; padding:13px 14px; background:light-dark(#fff,#0b1d26); color:inherit; font:600 15px var(--site-font-body); }
+.feedback { min-height:26px; margin-top:12px; font-size:13px; font-weight:700; }
+.feedback.good { color:#229875; }
+.feedback.bad { color:#c47a37; }
+.hint-box { display:none; margin-top:12px; padding:13px 15px; border-left:3px solid #d4a44e; border-radius:8px; background:light-dark(#fff7e8,#3b3020); color:light-dark(#60451b,#f3d9a7); font-size:13px; line-height:1.55; }
+.hint-box.show { display:block; }
+.teacher { margin-top:18px; }
+.teacher details { border:1px solid light-dark(#d8e4e6,#2b4751); border-radius:12px; padding:12px 14px; }
+.teacher summary { cursor:pointer; font-weight:800; font-size:13px; }
+.teacher-content { font-size:13px; line-height:1.65; padding-top:12px; color:light-dark(#526b74,#bad0d4); }
+.teacher-content h3 { color:inherit; font-size:14px; }
+footer { text-align:center; color:light-dark(#6c858d,#78969e); font-size:11px; padding:0 20px 28px; }
+.hidden { display:none !important; }
+#forceTask4.hidden { display:block !important; }
+#checkForce4Btn { display:none !important; }
+.complete { text-align:center; padding:34px 18px; }
+.complete .seal { width:76px; height:76px; border-radius:50%; display:grid; place-items:center; margin:0 auto 18px; background:rgba(53,171,132,.15); color:#42b58e; border:1px solid rgba(66,181,142,.4); font-size:34px; }
+@media(max-width:780px) { .layout { grid-template-columns:1fr; } .hero-art { width:75%; opacity:.38; } .hero-copy { max-width:100%; } .header-right span:last-child { display:none; } }
+@media(max-width:460px) { .data-grid { grid-template-columns:1fr 1fr; } .answer-row .btn { width:100%; } .brand { font-size:10px; } }
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="brand"><div class="brand-mark">⌁</div><div>FORSCHUNGSKOMPLEX <span style="opacity:.55">/</span> PHYSIK-MISSION</div></div>
+  <div class="header-right"><i class="pulse"></i><span>SYSTEMSTATUS</span><strong>NOTFALLMODUS</strong></div>
+</header>
+<main>
+<section class="hero">
+ <div class="hero-art" aria-hidden="true">
+  <svg viewBox="0 0 650 330" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#55d3c5" stop-opacity=".6"/><stop offset="1" stop-color="#2a6c8b" stop-opacity=".05"/></linearGradient></defs>
+   <path d="M210 330V150L330 60L450 150V330" stroke="url(#g)" stroke-width="2"/><path d="M255 330V170L330 115L405 170V330" stroke="#74d6cc" stroke-opacity=".35"/>
+   <path d="M0 270H650M0 290H650M330 0V330" stroke="#75d7d0" stroke-opacity=".16" stroke-dasharray="5 9"/>
+   <circle cx="330" cy="190" r="92" stroke="#6dd5c9" stroke-opacity=".45" stroke-width="2"/><circle cx="330" cy="190" r="67" stroke="#6dd5c9" stroke-opacity=".28"/><circle cx="330" cy="190" r="12" fill="#7de5d5" fill-opacity=".7"/>
+   <path d="M330 98V282M238 190H422M265 125L395 255M395 125L265 255" stroke="#7de5d5" stroke-opacity=".3"/>
+   <rect x="25" y="50" width="110" height="65" rx="5" stroke="#77cfc9" stroke-opacity=".35"/><path d="M38 70H118M38 82H94M38 94H107" stroke="#77cfc9" stroke-opacity=".4"/>
+   <rect x="500" y="210" width="120" height="70" rx="5" stroke="#77cfc9" stroke-opacity=".35"/><path d="M515 230H600M515 244H575M515 258H590" stroke="#77cfc9" stroke-opacity=".4"/>
+  </svg>
+ </div>
+ <div class="hero-copy">
+  <div class="eyebrow">Vertrauliche Einsatzakte · 07 / Mechanik</div>
+  <h1>Operation<br>Forschungsstation</h1>
+  <p>Ein Zwischenfall hat die Station abgeriegelt. Die Systeme fallen nacheinander aus. Nur wer die physikalischen Probleme löst, kann die Notabschaltung verhindern.</p>
+  <div class="meta-row"><span class="meta">◷ 45 MINUTEN</span><span class="meta">⌖ 5 SICHERHEITSSEKTOREN</span><span class="meta">⚙ MECHANIK · KLASSE 9</span></div>
+ </div>
+</section>
+<div class="layout">
+ <section class="panel" id="mainPanel">
+  <div id="intro">
+   <div class="tag">Einsatzbriefing · Priorität Alpha</div>
+   <h2>Willkommen im Kontrollzentrum.</h2>
+   <p class="muted">Agententeam, eure Mission beginnt jetzt. Lest die Hinweise sorgfältig, notiert eure Rechenwege und gebt die Ergebnisse mit der geforderten Einheit bzw. als Zahl ein.</p>
+   <div class="scene"><b>Nachricht der Stations-KI</b><p>„Achtung. Unbekannte Störung im Hauptreaktor. Die automatische Verriegelung ist aktiv. Fünf Sicherheitssysteme müssen manuell reaktiviert werden. Ich habe die relevanten Messdaten gesichert. Viel Erfolg.“</p></div>
+   <p class="story">Ihr befindet euch im Kontrollraum der Forschungsstation <strong>ORION-9</strong>. Die Türen sind verriegelt. In jedem Sektor wartet eine Aufgabe. Eine richtige Lösung schaltet den nächsten Bereich frei. Ihr habt nur 45 Minuten, bevor das Notfallsystem die Station endgültig herunterfährt.</p>
+   <div class="actions"><button class="btn" id="startBtn">MISSION STARTEN →</button><span class="muted" style="font-size:12px">Am besten im Team zu zweit oder dritt.</span></div>
+  </div>
+  <div id="game" class="hidden">
+   <div class="stage-top"><div><div class="tag" id="stageTag">SEKTOR 01 / 05</div><h2 id="stageTitle">Kontrollraum</h2><div class="muted" id="stageSub">Bewegungssensorik</div></div><span class="tag" id="lockStatus">● VERRIEGELT</span></div>
+   <div class="scene"><b id="sceneTitle">Sensorprotokoll 01</b><p id="sceneText"></p></div>
+   <div class="problem" id="problemText"></div>
+   <div class="data-grid" id="dataGrid"></div>
+   <div id="firstMission" class="hidden">
+    <div class="task-card"><div class="tag">Aufgabe 1 · Bewegungsanalyse</div><h3>Wer ist schneller?</h3><p>Die Stations-KI hat die Aufzeichnungen eines Sportevents gefunden. Drei Nachwuchsforschende sind jeweils 5 km gejoggt. Berechnet ihre Durchschnittsgeschwindigkeiten und findet heraus, wer am schnellsten war.</p><div class="runner-table"><div><b>Person</b><b>Laufzeit</b></div><div><span>Mia</span><span>33 min</span></div><div><span>Ben</span><span>30 min</span></div><div><span>Leon</span><span>39 min</span></div></div><p class="muted">Tragt die Geschwindigkeiten auf zwei Nachkommastellen gerundet in m/s ein.</p><div class="data-grid"><div class="datum"><small>Mia</small><label class="sr-only" for="speedMia">Geschwindigkeit Mia</label><input id="speedMia" inputmode="decimal" placeholder="m/s"></div><div class="datum"><small>Ben</small><label class="sr-only" for="speedBen">Geschwindigkeit Ben</label><input id="speedBen" inputmode="decimal" placeholder="m/s"></div><div class="datum"><small>Leon</small><label class="sr-only" for="speedLeon">Geschwindigkeit Leon</label><input id="speedLeon" inputmode="decimal" placeholder="m/s"></div></div><label class="field-label" for="fastestRunner">Wer war am schnellsten?</label><input id="fastestRunner" placeholder="Name eingeben …" autocomplete="off"></div>
+    <div class="task-card"><div class="tag">Aufgabe 2 · Routenberechnung</div><h3>Die Fahrradtour</h3><p>Ein Wartungsteam ist mit Fahrrädern unterwegs zur Forschungsstation. Die gesamte Strecke beträgt 36 km. Die Ankunft ist in zwei Stunden geplant. Nach der ersten Stunde zeigt das Navigationssystem erst 14 km zurückgelegte Strecke an.</p><p><b>Mit welcher Durchschnittsgeschwindigkeit muss das Team die restliche Strecke zurücklegen, um pünktlich anzukommen?</b></p><div class="data-grid"><div class="datum"><small>Gesamtstrecke</small><strong>36 km</strong></div><div class="datum"><small>Bisher gefahren</small><strong>14 km</strong></div><div class="datum"><small>Verbleibende Zeit</small><strong>1 h</strong></div></div><label class="field-label" for="bikeSpeed">Benötigte Durchschnittsgeschwindigkeit in km/h</label><input id="bikeSpeed" inputmode="decimal" placeholder="Geschwindigkeit eingeben …"></div>
+    <button class="btn" id="checkFirstBtn">BEIDE AUFGABEN PRÜFEN</button>
+   </div>
+   <div id="forceMission" class="hidden">
+    <button id="checkForceBtn" class="hidden" type="button" aria-hidden="true" tabindex="-1"></button>
+    <div class="task-card" id="forceTask3"><div class="tag">Aufgabe 3 · Kräfte und Bewegung</div><h3>Der Einkaufswagen</h3><p>Im Versorgungsbereich der Forschungsstation ist ein Einkaufswagen mit wichtigen Ersatzteilen beladen. Eine Person schiebt ihn mit einer Kraft von 45 N nach vorne. Gleichzeitig wirkt eine Reibungskraft von 15 N entgegen der Bewegungsrichtung.</p><p><b>Berechnet die resultierende Kraft und gebt ihre Richtung an.</b></p><div class="force-arrow"><span class="arrow">→</span><span>Schubkraft: 45 N nach vorne</span><span class="arrow">←</span><span>Reibungskraft: 15 N</span></div><label class="field-label" for="resultForce">Betrag der resultierenden Kraft in N</label><input id="resultForce" inputmode="decimal" placeholder="Kraft in N eingeben …"><label class="field-label" for="forceDirection">Richtung der resultierenden Kraft</label><input id="forceDirection" placeholder="Richtung eingeben …" autocomplete="off"><button class="btn" id="checkForce3Btn" style="margin-top:14px">AUFGABE 3 PRÜFEN</button></div>
+    <div class="task-card hidden" id="forceTask4"><div class="tag">Aufgabe 4 · Gewichtskraft</div><h3>Der Akkuschrauber</h3><p>Im Einkaufswagen liegt ein Akkuschrauber, der für die Reparatur der Forschungsstation benötigt wird. Seine Masse beträgt <b>820 g</b>. Für die Berechnung wird der Ortsfaktor mit <b>g = 10 N/kg</b> angesetzt.</p><p><b>Berechnet die Gewichtskraft des Akkuschraubers.</b></p><div class="data-grid"><div class="datum"><small>Masse</small><strong>820 g</strong></div><div class="datum"><small>Ortsfaktor</small><strong>10 N/kg</strong></div><div class="datum"><small>Gesucht</small><strong>F<sub>G</sub> in N</strong></div></div><label class="field-label" for="astronautWeight">Gewichtskraft in N</label><input id="astronautWeight" inputmode="decimal" placeholder="Kraft eingeben …"><button class="btn" id="checkForce4Btn" style="margin-top:14px">AUFGABE 4 PRÜFEN</button></div>
+   </div>
+   <div id="leverMission" class="hidden">
+    <div class="task-card"><div class="tag">Aufgabe 5 · Hebelgesetz</div><h3>Die Wippe</h3><p>In einem Aufenthaltsraum der Forschungsstation steht eine Wippe. Zwei Kinder möchten sie ins Gleichgewicht bringen. Das erste Kind hat eine Masse von 36 kg und sitzt 1,8 m vom Drehpunkt entfernt. Das zweite Kind hat eine Masse von 27 kg.</p><p><b>Berechnet, in welchem Abstand vom Drehpunkt das zweite Kind sitzen muss, damit die Wippe im Gleichgewicht ist.</b></p><div class="data-grid"><div class="datum"><small>Masse 1</small><strong>36 kg</strong></div><div class="datum"><small>Abstand 1</small><strong>1,8 m</strong></div><div class="datum"><small>Masse 2</small><strong>27 kg</strong></div></div><label class="field-label" for="seesawDistance">Abstand des zweiten Kindes in m</label><input id="seesawDistance" inputmode="decimal" placeholder="Abstand eingeben …"></div>
+    <div class="task-card"><div class="tag">Aufgabe 6 · Hebelgesetz</div><h3>Der Hebel am Felsbrocken</h3><p>Vor einem Versorgungstunnel liegt ein schwerer Stein. Ein Techniker möchte ihn mit einem 1,5 m langen Hebel anheben. Der Drehpunkt befindet sich 30 cm vom Stein entfernt. Am anderen Ende des Hebels drückt der Techniker nach unten.</p><p>Zum Anheben des Steins ist eine Kraft von 600 N erforderlich. <b>Berechnet, mit welcher Kraft der Techniker mindestens drücken muss, damit der Hebel im Gleichgewicht ist.</b></p><div class="data-grid"><div class="datum"><small>Hebellänge</small><strong>1,5 m</strong></div><div class="datum"><small>Lastarm</small><strong>0,30 m</strong></div><div class="datum"><small>Kraftarm</small><strong>1,20 m</strong></div></div><label class="field-label" for="leverForce">Benötigte Druckkraft in N</label><input id="leverForce" inputmode="decimal" placeholder="Kraft eingeben …"></div>
+    <button class="btn" id="checkLeverBtn">BEIDE AUFGABEN PRÜFEN</button>
+   </div>
+   <div id="inclinedMission" class="hidden">
+    <div class="task-card"><div class="tag">Aufgabe 7 · Kräfte an der schiefen Ebene</div><h3>Der Schlitten auf der Rampe</h3><p>Ein Schlitten mit einer Masse von <b>40 kg</b> steht auf einer schiefen Ebene. Die Rampe ist <b>10 m</b> lang und überwindet einen Höhenunterschied von <b>3 m</b>. Der Schlitten wird aus der Ruhe losgelassen.</p><p><b>Erstellt zunächst eine maßstabsgerechte Zeichnung der schiefen Ebene. Bestimmt mithilfe eurer Zeichnung die Hangabtriebskraft, die auf den Schlitten wirkt.</b></p><p class="muted">Verwendet den Ortsfaktor g = 10 N/kg. Zeichnet die Gewichtskraft und zerlegt sie in ihre Komponenten parallel und senkrecht zur Ebene. Lest die Hangabtriebskraft aus eurer Zeichnung ab.</p><div class="scene" style="min-height:190px;margin:14px 0;background:linear-gradient(115deg,rgba(9,35,46,.96),rgba(20,82,86,.82))"><svg viewBox="0 0 520 190" role="img" aria-label="Schematische Darstellung einer schiefen Ebene mit 10 Metern Rampenlänge und 3 Metern Höhenunterschied" style="width:100%;height:auto;max-height:190px"><path d="M72 150 L430 150 L430 42 Z" fill="rgba(120,210,200,.09)" stroke="#8bd8d0" stroke-width="2.5"/><path d="M72 150 L430 42" stroke="#f2c36f" stroke-width="4"/><rect x="230" y="88" width="35" height="22" rx="4" transform="rotate(-16.8 247 99)" fill="#d9ecec" stroke="#143b49" stroke-width="2"/><path d="M72 166H430" stroke="#a9c9ce" stroke-width="1"/><path d="M445 150V42" stroke="#a9c9ce" stroke-width="1.5"/><text x="245" y="145" fill="#e8f6f5" font-size="13" text-anchor="middle">10 m</text><text x="456" y="98" fill="#e8f6f5" font-size="13" transform="rotate(90 456 98)" text-anchor="middle">3 m</text><text x="82" y="135" fill="#e8f6f5" font-size="11">Start</text><text x="430" y="169" fill="#e8f6f5" font-size="11" text-anchor="end">Fußpunkt</text></svg></div><div class="data-grid"><div class="datum"><small>Masse</small><strong>40 kg</strong></div><div class="datum"><small>Rampenlänge</small><strong>10 m</strong></div><div class="datum"><small>Höhe</small><strong>3 m</strong></div></div><label class="field-label" for="inclineForce">Abgelesene Hangabtriebskraft in N</label><input id="inclineForce" inputmode="decimal" placeholder="Kraft in N eingeben …"><p class="muted">Da das Ergebnis aus einer Zeichnung abgelesen wird, werden auch leicht abweichende Werte akzeptiert.</p></div>
+    <button class="btn" id="checkInclinedBtn">HANGABTRIEBSKRAFT PRÜFEN</button>
+   </div>
+   <div id="finalMission" class="hidden">
+    <div class="task-card"><div class="tag">Aufgabe 8 · Mechanische Arbeit</div><h3>Die verriegelte Hebevorrichtung</h3><p>Der Motor muss ein Massestück mit einer Masse von <b>80 kg</b> um <b>350 cm</b> anheben. Die Steuerung verlangt die mechanische Arbeit, die dabei verrichtet wird.</p><p><b>Berechnet die verrichtete Hubarbeit.</b></p><div class="data-grid"><div class="datum"><small>Masse</small><strong>80 kg</strong></div><div class="datum"><small>Hubhöhe</small><strong>350 cm</strong></div><div class="datum"><small>Ortsfaktor</small><strong>10 N/kg</strong></div></div><label class="field-label" for="liftingWork">Hubarbeit in J</label><input id="liftingWork" inputmode="decimal" placeholder="Arbeit in J eingeben …"></div>
+    <div class="task-card"><div class="tag">Aufgabe 9 · Leistung</div><h3>Der Motor im Belastungstest</h3><p>Der Motor benötigt <b>20 Sekunden</b> für den gesamten Hebevorgang. Berechnet die Nutzleistung, die beim Anheben des Massestücks erbracht wird.</p><label class="field-label" for="motorPower">Nutzleistung des Motors in W</label><input id="motorPower" inputmode="decimal" placeholder="Leistung in W eingeben …"></div>
+    <div class="task-card"><div class="tag">Aufgabe 10 · Wirkungsgrad</div><h3>Die Effizienz des Motors</h3><p>Auf dem Typenschild des Elektromotors ist eine zugeführte Leistung von <b>150 W</b> angegeben. Der Motor benötigt <b>20 Sekunden</b> für den Hebevorgang.</p><p><b>Berechnet den Wirkungsgrad des Motors in Prozent.</b></p><label class="field-label" for="efficiency">Wirkungsgrad in %</label><input id="efficiency" inputmode="decimal" placeholder="Wirkungsgrad eingeben …"></div>
+    <button class="btn" id="checkFinalBtn">ALLE DREI AUFGABEN PRÜFEN</button>
+   </div>
+   <div class="answer-row" id="answerRow"><div class="field"><label for="answerInput" id="answerLabel">Lösung eingeben</label><input id="answerInput" inputmode="decimal" autocomplete="off" placeholder="Zahl eingeben …"></div><button class="btn" id="checkBtn">CODE PRÜFEN</button></div>
+   <div class="feedback" id="feedback" aria-live="polite"></div>
+   <div class="actions"><button class="btn secondary" id="hintBtn">HINWEIS ANFORDERN</button><button class="btn ghost" id="nextBtn" disabled>WEITER →</button></div>
+   <div class="hint-box" id="hintBox"></div>
+  </div>
+  <div id="finish" class="hidden complete">
+   <div class="seal">✓</div><div class="tag">Mission erfolgreich abgeschlossen</div><h2>Die Forschungsstation ist gerettet!</h2>
+   <p class="muted">Alle fünf Sicherheitssysteme wurden reaktiviert. Der Reaktor läuft stabil, die Verriegelung ist aufgehoben und die Station ist wieder unter Kontrolle.</p>
+   <div class="stats" style="max-width:420px;margin:22px auto"><div class="stat"><small>Verbleibende Zeit</small><strong id="finalTime">--:--</strong></div><div class="stat"><small>Gelöste Sektoren</small><strong>5 / 5</strong></div></div>
+   <button class="btn" id="restartBtn">MISSION NEU STARTEN</button>
+  </div>
+ </section>
+ <aside class="panel">
+  <div class="tag">Missionsübersicht</div><h2>Systemstatus</h2><p class="muted" style="font-size:12px">Die Sektoren werden nacheinander freigeschaltet.</p>
+  <div class="stats"><div class="stat"><small>Restzeit</small><strong id="timer">45:00</strong></div><div class="stat"><small>Fortschritt</small><strong id="progressText">0 / 5</strong></div></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="station-list" id="stationList">
+   <button class="station-link active" data-index="0"><span class="num">01</span><span><b>Kontrollraum</b><small>Bewegung</small></span></button>
+   <button class="station-link" data-index="1" disabled><span class="num">02</span><span><b>Maschinenraum</b><small>Kraft & Gewicht</small></span></button>
+   <button class="station-link" data-index="2" disabled><span class="num">03</span><span><b>Hebelstation</b><small>Hebelgesetz</small></span></button>
+   <button class="station-link" data-index="3" disabled><span class="num">04</span><span><b>Rampenanlage</b><small>Schiefe Ebene · Kräfte</small></span></button>
+   <button class="station-link" data-index="4" disabled><span class="num">05</span><span><b>Reaktorraum</b><small>Leistung</small></span></button>
+  </div>
+ </aside>
+</div>
+</main>
+<footer>ORION-9 · Digitaler Physik-Escape-Room · Mechanik · Jahrgangsstufe 9</footer>
+</div>
+<script>
+const missions = [
+ {title:"Kontrollraum",sub:"Bewegungsanalyse · Durchschnittsgeschwindigkeit",scene:"Datenarchiv 01 · Bewegungsprofile",story:"Die Stations-KI hat zwei Datensätze aus dem Bewegungsarchiv wiederhergestellt. Zuerst müssen die Laufzeiten dreier Testpersonen ausgewertet werden. Anschließend ist eine Fahrradroutenberechnung nötig, damit das mobile Wartungsteam rechtzeitig die Station erreicht.",problem:"",data:[],label:"",answer:0,tolerance:0,hint:"Aufgabe 1: Wandelt die Laufzeiten in Sekunden um und berechnet jeweils v = s / t. Aufgabe 2: Bestimmt zuerst die noch fehlende Strecke und die verbleibende Zeit. Danach gilt wieder v = s / t."},
+ {title:"Maschinenraum",sub:"Kräfte · Resultierende Kraft und Gewichtskraft",scene:"Kraftprotokoll 02 · Versorgungssystem",story:"Im Maschinenraum sind zwei Kraftmessungen zu überprüfen. Zuerst muss die Stations-KI wissen, mit welcher Kraft ein Versorgungswagen tatsächlich bewegt wird. Danach wird die Gewichtskraft eines Werkzeugs aus dem Versorgungswagen benötigt.",problem:"",data:[],label:"",answer:0,tolerance:0,hint:"Aufgabe 3: Wirken Kräfte in entgegengesetzte Richtungen, werden ihre Beträge voneinander abgezogen. Aufgabe 4: Wandelt die Masse von Gramm in Kilogramm um und berechnet F_G = m · g."},
+ {title:"Hebelstation",sub:"Hebelgesetz · Gleichgewicht",scene:"Mechanikprotokoll 03 · Hebelsysteme",story:"Die Forschungsstation nutzt Hebel, um schwere Bauteile mit möglichst wenig Kraft zu bewegen. Zwei Hebelsysteme müssen berechnet werden: eine Wippe im Aufenthaltsraum und ein Hebel am Versorgungstunnel. Erst wenn beide Systeme im Gleichgewicht sind, wird der nächste Sektor freigegeben.",problem:"",data:[],label:"",answer:0,tolerance:0,hint:"Für beide Aufgaben gilt das Hebelgesetz: Kraft₁ · Kraftarm₁ = Kraft₂ · Kraftarm₂. Achtet bei Aufgabe 6 darauf, dass der Kraftarm nur der Teil des Hebels vom Drehpunkt bis zum Ende ist."},
+ {title:"Rampenanlage",sub:"Schiefe Ebene · Hangabtriebskraft",scene:"Kraftprotokoll 04 · Rampenanlage",story:"Ein Transportschlitten muss über eine geneigte Rampe bewegt werden. Bevor die automatische Bremsanlage aktiviert werden kann, muss die Stations-KI wissen, wie groß die Hangabtriebskraft ist. Erstellt dazu eine maßstabsgerechte Zeichnung und bestimmt die Kraft grafisch.",problem:"",data:[],label:"",answer:120,tolerance:5,hint:"Berechnet zuerst die Gewichtskraft des Schlittens. Zeichnet dann die Gewichtskraft senkrecht nach unten und zerlegt sie in eine Komponente parallel zur Ebene (Hangabtriebskraft) und eine senkrechte Komponente. Nutzt die Maße der Rampe für eine maßstabsgerechte Zeichnung."},
+ {title:"Reaktorraum",sub:"Hubarbeit · Leistung · Wirkungsgrad",scene:"Reaktorprotokoll 05 · Hebevorrichtung",story:"Die letzte Sicherheitssperre blockiert die Hebevorrichtung des Reaktors. Der Elektromotor muss ein schweres Massestück anheben. Berechnet zunächst die verrichtete Hubarbeit, anschließend die Nutzleistung und schließlich den Wirkungsgrad des Motors, damit die Reaktoranlage wieder freigegeben werden kann.",problem:"",data:[],label:"",answer:0,tolerance:0,hint:"Aufgabe 8: Berechnet zuerst die Gewichtskraft mit F_G = m · g. Die Hubarbeit ergibt sich aus W = F_G · h. Aufgabe 9: Berechnet die Nutzleistung mit P_nutz = W / t. Aufgabe 10: Der Wirkungsgrad ist η = P_nutz / P_zu · 100 %. Die zugeführte Leistung beträgt 150 W."}
+];
+let current=0, solved=0, seconds=2700, interval=null, started=false, hintsUsed=0;
+const $=id=>document.getElementById(id);
+$('checkForce3Btn').textContent='AUFGABEN 3 UND 4 PRÜFEN';
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function updateTimer(){ $('timer').textContent=formatTime(seconds); if(seconds<=300)$('timer').style.color='#df8b54'; }
+function startTimer(){ if(interval)clearInterval(interval); interval=setInterval(()=>{if(seconds>0){seconds--;updateTimer();}else{clearInterval(interval);$('feedback').textContent='Zeit abgelaufen. Besprecht mit eurer Lehrkraft, ob ihr die Mission fortsetzen dürft.';$('feedback').className='feedback bad';$('checkBtn').disabled=true;}},1000); }
+function render(){const m=missions[current];$('stageTag').textContent=`SEKTOR 0${current+1} / 05`;$('stageTitle').textContent=m.title;$('stageSub').textContent=m.sub;$('sceneTitle').textContent=m.scene;$('sceneText').textContent=m.story;$('problemText').textContent=m.problem;$('dataGrid').innerHTML=m.data.map(d=>`<div class="datum"><small>${d[0]}</small><strong>${d[1]}</strong></div>`).join('');$('firstMission').classList.toggle('hidden',current!==0);$('forceMission').classList.toggle('hidden',current!==1);$('leverMission').classList.toggle('hidden',current!==2);$('inclinedMission').classList.toggle('hidden',current!==3);$('finalMission').classList.toggle('hidden',current!==4);$('dataGrid').classList.toggle('hidden',current<3||current===3||current===4);$('problemText').classList.toggle('hidden',current<3||current===3||current===4);$('answerRow').classList.toggle('hidden',current<3||current===3||current===4);$('answerLabel').textContent=m.label;$('answerInput').value='';$('answerInput').disabled=false;$('checkBtn').disabled=false;$('checkFirstBtn').disabled=false;$('checkForceBtn').disabled=false;$('checkLeverBtn').disabled=false;$('checkInclinedBtn').disabled=false;$('checkFinalBtn').disabled=false;['speedMia','speedBen','speedLeon','fastestRunner','bikeSpeed','resultForce','forceDirection','astronautWeight','seesawDistance','leverForce','inclineForce','liftingWork','motorPower','efficiency'].forEach(id=>{$(id).value='';$(id).disabled=false;});$('feedback').textContent='';$('feedback').className='feedback';$('nextBtn').disabled=true;$('nextBtn').textContent=current===4?'MISSION ABSCHLIESSEN →':'WEITER →';$('hintBox').classList.remove('show');$('hintBox').textContent='';$('lockStatus').textContent='● SYSTEMPRÜFUNG AUSSTEHEND';$('stationList').querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===current);b.classList.toggle('done',i<solved);b.disabled=i>solved;});}
+function updateProgress(){ $('progressText').textContent=`${solved} / 5`; $('progressFill').style.width=(solved/5*100)+'%'; }
+$('startBtn').addEventListener('click',()=>{$('intro').classList.add('hidden');$('game').classList.remove('hidden');started=true;render();startTimer();});
+$('checkBtn').addEventListener('click',()=>{const raw=$('answerInput').value.trim().replace(',','.');const value=Number(raw);const m=missions[current];if(raw===''||!Number.isFinite(value)){$('feedback').textContent='Bitte gebt einen gültigen Zahlenwert ein.';$('feedback').className='feedback bad';return;}if(Math.abs(value-m.answer)<=m.tolerance){if(current===solved)solved++;$('feedback').textContent='Richtig! Das System wurde reaktiviert. Der nächste Sektor ist freigegeben.';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('answerInput').disabled=true;$('checkBtn').disabled=true;$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((b,i)=>{b.disabled=i>solved;b.classList.toggle('done',i<solved);});}else{$('feedback').textContent='Das ist leider nicht korrekt. Prüft euren Rechenweg und die Einheiten.';$('feedback').className='feedback bad';}});
+$('checkFirstBtn').addEventListener('click',()=>{const n=id=>Number($(id).value.trim().replace(',','.'));const valid=(id,target)=>$(id).value.trim()!==''&&Number.isFinite(n(id))&&Math.abs(n(id)-target)<0.015;const speeds=valid('speedMia',2.53)&&valid('speedBen',2.78)&&valid('speedLeon',2.14);const fastest=$('fastestRunner').value.trim().toLowerCase()==='ben';const bike=valid('bikeSpeed',22);if(speeds&&fastest&&bike){if(current===solved)solved++;$('feedback').textContent='Alle Ergebnisse stimmen! Ben war am schnellsten und das Wartungsteam muss 22 km/h fahren. Sektor 01 freigegeben.';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('checkFirstBtn').disabled=true;['speedMia','speedBen','speedLeon','fastestRunner','bikeSpeed'].forEach(id=>$(id).disabled=true);$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((b,i)=>{b.disabled=i>solved;b.classList.toggle('done',i<solved);});}else{const missing=[];if(!speeds||!fastest)missing.push('Aufgabe 1');if(!bike)missing.push('Aufgabe 2');$('feedback').textContent='Noch nicht ganz richtig. Überprüft '+missing.join(' und ')+'. Achtet auf die Umrechnung der Minuten in Sekunden, die Einheiten und die Rundung.';$('feedback').className='feedback bad';}});
+$("checkForce3Btn").addEventListener('click',()=>{const force=$('resultForce').value.trim().replace(',','.');const direction=$('forceDirection').value.trim().toLowerCase();const weight=$('astronautWeight').value.trim().replace(',','.');const forceOK=force!==''&&Number.isFinite(Number(force))&&Math.abs(Number(force)-30)<0.001;const directionOK=['nach vorne','vorne'].includes(direction);const weightOK=weight!==''&&Number.isFinite(Number(weight))&&Math.abs(Number(weight)-8.2)<0.001;if(forceOK&&directionOK&&weightOK){if(current===solved)solved++;$('feedback').textContent='Beide Aufgaben richtig! Die resultierende Kraft beträgt 30 N nach vorne, die Gewichtskraft 8,2 N. Sektor 02 freigegeben.';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('checkForce3Btn').disabled=true;['resultForce','forceDirection','astronautWeight'].forEach(id=>$(id).disabled=true);$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((b,i)=>{b.disabled=i>solved;b.classList.toggle('done',i<solved);});}else{const missing=[];if(!forceOK||!directionOK)missing.push('Aufgabe 3');if(!weightOK)missing.push('Aufgabe 4');$('feedback').textContent='Noch nicht ganz richtig. Überprüft '+missing.join(' und ')+'. Bei Aufgabe 3 werden die entgegengesetzten Kräfte verrechnet; bei Aufgabe 4 muss die Masse zuerst in Kilogramm umgerechnet werden.';$('feedback').className='feedback bad';}});
+$('checkLeverBtn').addEventListener('click',()=>{const a=$('seesawDistance').value.trim().replace(',','.');const b=$('leverForce').value.trim().replace(',','.');const aOK=a!==''&&Number.isFinite(Number(a))&&Math.abs(Number(a)-2.4)<0.001;const bOK=b!==''&&Number.isFinite(Number(b))&&Math.abs(Number(b)-150)<0.001;if(aOK&&bOK){if(current===solved)solved++;$('feedback').textContent='Beide Hebelsysteme im Gleichgewicht! Das zweite Kind sitzt 2,4 m vom Drehpunkt entfernt. Die benötigte Druckkraft beträgt 150 N. Sektor 03 freigegeben.';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('checkLeverBtn').disabled=true;['seesawDistance','leverForce'].forEach(id=>$(id).disabled=true);$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((button,i)=>{button.disabled=i>solved;button.classList.toggle('done',i<solved);});}else{const missing=[];if(!aOK)missing.push('Aufgabe 5');if(!bOK)missing.push('Aufgabe 6');$('feedback').textContent='Noch nicht ganz richtig. Überprüft '+missing.join(' und ')+'. Achtet bei Aufgabe 6 auf die Länge des Kraftarms.';$('feedback').className='feedback bad';}});
+$('checkInclinedBtn').addEventListener('click',()=>{const raw=$('inclineForce').value.trim().replace(',','.');const value=Number(raw);if(raw===''||!Number.isFinite(value)){$('feedback').textContent='Bitte gebt einen gültigen Zahlenwert in Newton ein.';$('feedback').className='feedback bad';return;}if(Math.abs(value-120)<=5){if(current===solved)solved++;$('feedback').textContent='Sehr gut! Euer zeichnerisch bestimmter Wert liegt im akzeptierten Bereich. Die Hangabtriebskraft beträgt ungefähr 120 N. Sektor 04 freigegeben.';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('inclineForce').disabled=true;$('checkInclinedBtn').disabled=true;$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((button,i)=>{button.disabled=i>solved;button.classList.toggle('done',i<solved);});}else{$('feedback').textContent='Der Wert liegt noch außerhalb des Toleranzbereichs. Prüft eure maßstabsgerechte Zeichnung und die Zerlegung der Gewichtskraft.';$('feedback').className='feedback bad';}});
+$('checkFinalBtn').addEventListener('click',()=>{const work=$('liftingWork').value.trim().replace(',','.');const power=$('motorPower').value.trim().replace(',','.');const efficiency=$('efficiency').value.trim().replace(',','.');const workOK=work!==''&&Number.isFinite(Number(work))&&Math.abs(Number(work)-2800)<0.001;const powerOK=power!==''&&Number.isFinite(Number(power))&&Math.abs(Number(power)-140)<0.001;const efficiencyOK=efficiency!==''&&Number.isFinite(Number(efficiency))&&Number(efficiency)>=93&&Number(efficiency)<=94;if(workOK&&powerOK&&efficiencyOK){if(current===solved)solved++;$('feedback').textContent='Alle drei Berechnungen stimmen! Die Hubarbeit beträgt 2800 J, die Nutzleistung 140 W und der Wirkungsgrad liegt zwischen 93 % und 94 %. Der Reaktor wird freigegeben – Mission abgeschlossen!';$('feedback').className='feedback good';$('lockStatus').textContent='✓ SYSTEM FREIGESCHALTET';$('checkFinalBtn').disabled=true;['liftingWork','motorPower','efficiency'].forEach(id=>$(id).disabled=true);$('nextBtn').disabled=false;updateProgress();$('stationList').querySelectorAll('button').forEach((button,i)=>{button.disabled=i>solved;button.classList.toggle('done',i<solved);});}else{const missing=[];if(!workOK)missing.push('Aufgabe 8');if(!powerOK)missing.push('Aufgabe 9');if(!efficiencyOK)missing.push('Aufgabe 10');$('feedback').textContent='Noch nicht ganz richtig. Überprüft '+missing.join(', und ')+'. Für den Wirkungsgrad benötigt ihr Nutzleistung und zugeführte Leistung. Akzeptiert werden Wirkungsgrade von 93 % bis 94 %.';$('feedback').className='feedback bad';}});
+$('answerInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!$('checkBtn').disabled)$('checkBtn').click();});
+$('hintBtn').addEventListener('click',()=>{const box=$('hintBox');box.textContent=missions[current].hint;box.classList.add('show');hintsUsed++;});
+$('nextBtn').addEventListener('click',()=>{if(current<4){current++;render();}else{$('game').classList.add('hidden');$('finish').classList.remove('hidden');$('finalTime').textContent=formatTime(seconds);clearInterval(interval);}});
+$('restartBtn').addEventListener('click',()=>{current=0;solved=0;seconds=2700;hintsUsed=0;clearInterval(interval);$('finish').classList.add('hidden');$('intro').classList.remove('hidden');$('timer').textContent='45:00';$('timer').style.color='';updateProgress();started=false;});
+$("stationList").querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.index);if(i<=solved&&started){current=i;$('game').classList.remove('hidden');$('finish').classList.add('hidden');$('forceTask3').classList.remove('hidden');$('forceTask4').classList.add('hidden');render();}}));
+updateTimer();updateProgress();
+</script>
+</body>
+</html>
